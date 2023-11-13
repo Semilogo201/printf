@@ -11,7 +11,7 @@ int _printf(const char *format, ...)
 	int sum = 0;
 	va_list ap;
 	char *p, *start;
-	cprint_t  cprint = CPRINT_INIT;
+	param_t param = PARAM_INIT;
 
 	va_start(ap, format);
 
@@ -21,7 +21,7 @@ int _printf(const char *format, ...)
 		return (-1);
 	for (p = (char *)format; *p; p++)
 	{
-		init_cprint(&cprint, ap);
+		init_param(&param, ap);
 		if (*p != '%')
 		{
 			sum += _putchar(*p);
@@ -29,19 +29,19 @@ int _printf(const char *format, ...)
 		}
 		start = p;
 		p++;
-		while (get_flag(p, &cprint)) /* while char at p is flag char */
+		while (get_flag(p, &param)) /* while char at p is flag char */
 		{
 			p++; /* next char */
 		}
-		p = get_width(p, &cprint, ap);
-		p = get_precision(p, &cprint, ap);
-		if (get_modifier(p, &cprint))
+		p = get_width(p, &param, ap);
+		p = get_precision(p, &param, ap);
+		if (get_modifier(p, &param))
 			p++;
 		if (!get_specifier(p))
 			sum += print_from_to(start, p,
-				cprint.l_modifier || cprint.h_modifier ? p - 1 : 0);
+				param.l_modifier || param.h_modifier ? p - 1 : 0);
 		else
-			sum += get_print_func(p, ap, &cprint);
+			sum += get_print_func(p, ap, &param);
 	}
 	_putchar(BUF_FLUSH);
 	va_end(ap);

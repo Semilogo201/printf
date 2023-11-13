@@ -3,20 +3,20 @@
 /**
  * print_char - prints character
  * @ap: argument pointer
- * @cprint: the parameters struct
+ * @param: the parameters struct
  *
  * Return: number chars printed
  */
-int print_char(va_list ap, cprint_t *cprint)
+int print_char(va_list ap, param_t *param)
 {
 	char pad_char = ' ';
 	unsigned int pad = 1, sum = 0, ch = va_arg(ap, int);
 
-	if (cprint->minus_flag)
+	if (param->minus_flag)
 		sum += _putchar(ch);
-	while (pad++ < cprint->width)
+	while (pad++ < param->width)
 		sum += _putchar(pad_char);
-	if (!cprint->minus_flag)
+	if (!param->minus_flag)
 		sum += _putchar(ch);
 	return (sum);
 }
@@ -24,57 +24,57 @@ int print_char(va_list ap, cprint_t *cprint)
 /**
  * print_int - prints integer
  * @ap: argument pointer
- * @cprint: the parameters struct
+ * @param: the parameters struct
  *
  * Return: number chars printed
  */
-int print_int(va_list ap, cprint_t *cprint)
+int print_int(va_list ap, param_t *param)
 {
 	long l;
 
-	if (cprint->l_modifier)
+	if (param->l_modifier)
 		l = va_arg(ap, long);
-	else if (cprint->h_modifier)
+	else if (param->h_modifier)
 		l = (short int)va_arg(ap, int);
 	else
 		l = (int)va_arg(ap, int);
-	return (print_number(convert(l, 10, 0, cprint), cprint));
+	return (print_number(convert(l, 10, 0, param), param));
 }
 
 /**
  * print_string - prints string
  * @ap: argument pointer
- * @cprint: the parameters struct
+ * @param: the parameters struct
  *
  * Return: number chars printed
  */
-int print_string(va_list ap, cprint_t *cprint)
+int print_string(va_list ap, param_t *param)
 {
 	char *str = va_arg(ap, char *), pad_char = ' ';
 	unsigned int pad = 0, sum = 0, i = 0, j;
 
-	(void)cprint;
+	(void)param;
 	switch ((int)(!str))
 		case 1:
 			str = NULL_STRING;
 
 	j = pad = _strlen(str);
-	if (cprint->precision < pad)
-		j = pad = cprint->precision;
+	if (param->precision < pad)
+		j = pad = param->precision;
 
-	if (cprint->minus_flag)
+	if (param->minus_flag)
 	{
-		if (cprint->precision != UINT_MAX)
+		if (param->precision != UINT_MAX)
 			for (i = 0; i < pad; i++)
 				sum += _putchar(*str++);
 		else
 			sum += _puts(str);
 	}
-	while (j++ < cprint->width)
+	while (j++ < param->width)
 		sum += _putchar(pad_char);
-	if (!cprint->minus_flag)
+	if (!param->minus_flag)
 	{
-		if (cprint->precision != UINT_MAX)
+		if (param->precision != UINT_MAX)
 			for (i = 0; i < pad; i++)
 				sum += _putchar(*str++);
 		else
@@ -86,25 +86,25 @@ int print_string(va_list ap, cprint_t *cprint)
 /**
  * print_percent - prints string
  * @ap: argument pointer
- * @cprint: the parameters struct
+ * @param: the parameters struct
  *
  * Return: number chars printed
  */
-int print_percent(va_list ap, cprint_t *cprint)
+int print_percent(va_list ap, param_t *param)
 {
 	(void)ap;
-	(void)cprint;
+	(void)param;
 	return (_putchar('%'));
 }
 
 /**
  * print_S - custom format specifier
  * @ap: argument pointer
- * @cprint: the parameters struct
+ * @param: the parameters struct
  *
  * Return: number chars printed
  */
-int print_S(va_list ap, cprint_t *cprint)
+int print_S(va_list ap, param_t *param)
 {
 	char *str = va_arg(ap, char *);
 	char *hex;
@@ -118,7 +118,7 @@ int print_S(va_list ap, cprint_t *cprint)
 		{
 			sum += _putchar('\\');
 			sum += _putchar('x');
-			hex = convert(*str, 16, 0, cprint);
+			hex = convert(*str, 16, 0, param);
 			if (!hex[1])
 				sum += _putchar('0');
 			sum += _puts(hex);
@@ -130,3 +130,4 @@ int print_S(va_list ap, cprint_t *cprint)
 	}
 	return (sum);
 }
+
