@@ -16,7 +16,7 @@ int print_char(va_list ap, cprint_t *cprint)
 		sum += _putchar(ch);
 	while (pad++ < cprint->width)
 		sum += _putchar(pad_char);
-	if (!pchar->minus_flag)
+	if (!cprint->minus_flag)
 		sum += _putchar(ch);
 	return (sum);
 }

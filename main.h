@@ -107,8 +107,8 @@ int print_number(char *str, cprint_t *cprint);
 int print_number_right_shift(char *str, cprint_t *cprint);
 int print_number_left_shift(char *str, cprint_t *cprint);
 
-/* pchar.c module */
-void init_pchar(cprint_t *cprint, va_list ap);
+/* cprint.c module */
+void init_cprint(cprint_t *cprint, va_list ap);
 
 /* string_fields.c modoule */
 char *get_precision(char *p, cprint_t *cprint, va_list ap);

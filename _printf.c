@@ -34,12 +34,12 @@ int _printf(const char *format, ...)
 			p++; /* next char */
 		}
 		p = get_width(p, &cprint, ap);
-		p = get_precision(p, &p_char, ap);
+		p = get_precision(p, &cprint, ap);
 		if (get_modifier(p, &cprint))
 			p++;
 		if (!get_specifier(p))
 			sum += print_from_to(start, p,
-				cprint.l_modifier ||p_char.h_modifier ? p - 1 : 0);
+				cprint.l_modifier || cprint.h_modifier ? p - 1 : 0);
 		else
 			sum += get_print_func(p, ap, &cprint);
 	}
