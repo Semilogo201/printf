@@ -1,46 +1,50 @@
 #include "main.h"
+
 /**
- * _printf - is a function that selects the correct function to print.
- * @format: identifier to look for.
- * Return: the length of the string.
+ * _printf - prints anything
+ * @format: the format string
+ *
+ * Return: number of bytes printed
  */
-int _printf(const char * const format, ...)
+int _printf(const char *format, ...)
 {
-	match m[] = {
-		{"%s", print_s}, {"%c", print_c},
-		{"%%", print_37},
-		{"%i", print_i}, {"%d", print_d}, {"%r", print_revs},
-		{"%R", print_rot13}, {"%b", print_bin},
-		{"%u", print_unsigned},
-		{"%o", print_oct}, {"%x", print_hex}, {"%X", print_HEX},
-		{"%S", print_exc_string}, {"%p", print_pointer}
-	};
+	int sum = 0;
+	va_list ap;
+	char *p, *start;
+	cprint_t  cprint = CPRINT_INIT;
 
-	va_list args;
-	int i = 0, j, length = 0;
+	va_start(ap, format);
 
-	va_start(args, format);
-	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
+	if (!format || (format[0] == '%' && !format[1]))
 		return (-1);
-
-Here:
-	while (format[i] != '\0')
+	if (format[0] == '%' && format[1] == ' ' && !format[2])
+		return (-1);
+	for (p = (char *)format; *p; p++)
 	{
-		j = 13;
-		while (j >= 0)
+		init_cprint(&cprint, ap);
+		if (*p != '%')
 		{
-			if (p[j].ph[0] == format[i] && p[j].ph[1] == format[i + 1])
-			{
-				length += p[j].function(args);
-				i = i + 2;
-				goto Here;
-			}
-			j--;
+			sum += _putchar(*p);
+			continue;
 		}
-		_putchar(format[i]);
-		length++;
-		i++;
+		start = p;
+		p++;
+		while (get_flag(p, &cprint)) /* while char at p is flag char */
+		{
+			p++; /* next char */
+		}
+		p = get_width(p, &cprint, ap);
+		p = get_precision(p, &p_char, ap);
+		if (get_modifier(p, &cprint))
+			p++;
+		if (!get_specifier(p))
+			sum += print_from_to(start, p,
+				cprint.l_modifier ||p_char.h_modifier ? p - 1 : 0);
+		else
+			sum += get_print_func(p, ap, &cprint);
 	}
-	va_end(args);
-	return (length);
+	_putchar(BUF_FLUSH);
+	va_end(ap);
+	return (sum);
 }
+
