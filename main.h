@@ -107,7 +107,7 @@ int print_number(char *str, param_t *param);
 int print_number_right_shift(char *str, param_t *param);
 int print_number_left_shift(char *str, param_t *param);
 
-/* params.c module */
+/* param.c module */
 void init_param(param_t *param, va_list ap);
 
 /* string_fields.c modoule */
