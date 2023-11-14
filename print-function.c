@@ -3,9 +3,9 @@
 /**
  * print_char - prints character
  * @ap: argument pointer
- * @param: the parameters struct
+ * @param: the parameters structure
  *
- * Return: number chars printed
+ * Return: number of characters printed
  */
 int print_char(va_list ap, param_t *param)
 {
